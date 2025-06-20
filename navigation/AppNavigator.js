@@ -6,22 +6,25 @@ import VerseList from '../screens/VerseList';
 import ViewVerse from '../screens/ViewVerse';
 import Header from '../components/Header';
 import Settings from '../screens/Settings';
+import { ThemeProvider } from '../Theme/ThemeContext';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => (
-    <NavigationContainer>
-        <Stack.Navigator
-            screenOptions={{
-                header: () => <Header title="Bhagavat Gita" />
-            }}
-        >
-            <Stack.Screen name="Home" component={ChapterList} />
-            <Stack.Screen name="Chapter" component={VerseList} />
-            <Stack.Screen name="Verse" component={ViewVerse} />
-            <Stack.Screen name="Settings" component={Settings} />
-        </Stack.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+        <NavigationContainer>
+            <Stack.Navigator
+                screenOptions={{
+                    header: () => <Header title="Bhagavat Gita" />
+                }}
+            >
+                <Stack.Screen name="Home" component={ChapterList} />
+                <Stack.Screen name="Chapter" component={VerseList} />
+                <Stack.Screen name="Verse" component={ViewVerse} />
+                <Stack.Screen name="Settings" component={Settings} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    </ThemeProvider>
 );
 
 export default AppNavigator;
