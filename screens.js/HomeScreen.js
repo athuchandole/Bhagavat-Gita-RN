@@ -31,10 +31,13 @@ export default function HomeScreen({ navigation }) {
                             onPress={() => navigation.navigate('Chapter', { chapterId: item.id })}
                         >
                             <Text style={styles.chapterTitle}>
-                                {item.chapter_number}. {item.name}
+                                Chapter {item.chapter_number}
+                            </Text>
+                            <Text style={styles.chapterTitle}>
+                                {item.name} ({item.name_meaning})
                             </Text>
                             <Text style={styles.chapterMeaning}>
-                                ({item.name_meaning})
+                                📄 Total Verses ({item.verses_count})
                             </Text>
                         </TouchableOpacity>
                     )}
