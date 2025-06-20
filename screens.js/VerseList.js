@@ -7,7 +7,7 @@ import Loading from '../components/Loading';
 import STORAGE_KEYS from '../storage/database';
 import Screen from '../components/Screens';
 
-export default function ChapterScreen({ route, navigation }) {
+export default function VerseList({ route, navigation }) {
     const { chapterId } = route.params;
     const verses = useFetchData(
         STORAGE_KEYS.VERSES(chapterId),

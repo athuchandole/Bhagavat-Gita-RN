@@ -6,7 +6,7 @@ import Loading from '../components/Loading';
 import STORAGE_KEYS from '../storage/database';
 import Screen from '../components/Screens';
 
-export default function HomeScreen({ navigation }) {
+export default function ChapterList({ navigation }) {
     const chapters = useFetchData(STORAGE_KEYS.CHAPTERS, chapterAPI.getChapters);
 
     if (!chapters) return <Loading />;

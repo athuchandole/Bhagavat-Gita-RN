@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { Text, StyleSheet, ScrollView } from 'react-native';
 import verseAPI from '../api/verses';
 import useFetchData from '../hooks/useFetchData';
 import Loading from '../components/Loading';
 import STORAGE_KEYS from '../storage/database';
 
-export default function VerseScreen({ route }) {
+export default function ViewVerse({ route }) {
     const { chapterId, verseId } = route.params;
     const verse = useFetchData(
         STORAGE_KEYS.VERSE(chapterId, verseId),
