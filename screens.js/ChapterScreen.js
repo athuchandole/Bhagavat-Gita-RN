@@ -49,11 +49,6 @@ export default function ChapterScreen({ route, navigation }) {
                             }
                         >
                             <Text style={styles.verseTitle}>Verse {item.verse_number}</Text>
-                            {item.text && (
-                                <Text style={styles.verseSnippet} numberOfLines={2}>
-                                    {item.text}
-                                </Text>
-                            )}
                         </TouchableOpacity>
                     )}
                     contentContainerStyle={styles.listContent}
