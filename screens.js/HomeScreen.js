@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import chapterAPI from '../api/chapters';
+
+import Screen from '../components/Screens';
 import Loading from '../components/Loading';
 
 export default function HomeScreen({ navigation }) {
@@ -17,27 +19,29 @@ export default function HomeScreen({ navigation }) {
     if (chapters.length === 0) return <Loading />;
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.header}>Chapters</Text>
-            <FlatList
-                data={chapters}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        style={styles.chapterCard}
-                        onPress={() => navigation.navigate('Chapter', { chapterId: item.id })}
-                    >
-                        <Text style={styles.chapterTitle}>
-                            {item.chapter_number}. {item.name}
-                        </Text>
-                        <Text style={styles.chapterMeaning}>
-                            ({item.name_meaning})
-                        </Text>
-                    </TouchableOpacity>
-                )}
-                contentContainerStyle={styles.listContent}
-            />
-        </View>
+        <Screen>
+            <View style={styles.container}>
+                <Text style={styles.header}>Chapters</Text>
+                <FlatList
+                    data={chapters}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            style={styles.chapterCard}
+                            onPress={() => navigation.navigate('Chapter', { chapterId: item.id })}
+                        >
+                            <Text style={styles.chapterTitle}>
+                                {item.chapter_number}. {item.name}
+                            </Text>
+                            <Text style={styles.chapterMeaning}>
+                                ({item.name_meaning})
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                    contentContainerStyle={styles.listContent}
+                />
+            </View>
+        </Screen>
     );
 }
 
