@@ -1,24 +1,24 @@
 const Colors = {
     light: {
-        primary: '#4F46E5',     // Indigo-600
-        secondary: '#6366F1',   // Indigo-500
-        background: '#F9FAFB',  // Gray-50
-        surface: '#FFFFFF',
-        text: '#111827',        // Gray-900
-        mutedText: '#6B7280',   // Gray-500
-        border: '#E5E7EB',      // Gray-200
-        icon: '#4B5563',        // Gray-600
+        primary: 'rgb(0, 149, 246)',       // Vibrant Blue
+        secondary: 'rgb(255, 55, 95)',     // Electric Pink
+        background: 'rgb(250, 250, 250)',  // Near-white
+        surface: 'rgb(255, 255, 255)',     // Pure White
+        text: 'rgb(20, 20, 20)',           // Near-black
+        mutedText: 'rgb(120, 124, 130)',   // Neutral Gray
+        border: 'rgb(230, 230, 230)',      // Light Gray Border
+        icon: 'rgb(100, 100, 255)',        // Soft Blue Icon
     },
 
     dark: {
-        primary: '#818CF8',     // Indigo-400
-        secondary: '#A5B4FC',   // Indigo-300
-        background: '#1F2937',  // Gray-800
-        surface: '#111827',     // Gray-900
-        text: '#F9FAFB',        // Gray-50
-        mutedText: '#9CA3AF',   // Gray-400
-        border: '#374151',      // Gray-700
-        icon: '#D1D5DB',        // Gray-300
+        primary: 'rgb(0, 200, 255)',       // Bright Cyan
+        secondary: 'rgb(255, 105, 180)',   // Hot Pink
+        background: 'rgb(20, 20, 30)',     // Very Dark Blue-Gray
+        surface: 'rgb(30, 30, 40)',        // Slightly Lighter Surface
+        text: 'rgb(245, 245, 245)',        // Almost White
+        mutedText: 'rgb(160, 160, 180)',   // Soft Grayish Blue
+        border: 'rgb(60, 60, 80)',         // Dark Blue-Gray Border
+        icon: 'rgb(255, 195, 0)',          // Golden Yellow Icon
     },
 };
 
