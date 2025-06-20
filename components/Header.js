@@ -1,22 +1,34 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Or use another icon library
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 // Dynamically get status bar height
 const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 44 : StatusBar.currentHeight || 24;
 
 const Header = ({ title }) => {
-    const handleToggle = () => {
-        // Implement your toggle logic here (e.g. open drawer, switch theme)
-        console.log('Toggle button pressed');
+    const navigation = useNavigation();
+
+    const handleMenuToggle = () => {
+        console.log('Menu button pressed');
+        // Handle drawer open or something else
+    };
+
+    const handleSettingsPress = () => {
+        navigation.navigate('Settings'); // Ensure 'Settings' is a valid route
     };
 
     return (
         <View style={[styles.header, { paddingTop: STATUS_BAR_HEIGHT }]}>
             <Text style={styles.title}>{title}</Text>
-            <TouchableOpacity onPress={handleToggle} style={styles.toggle}>
-                <Ionicons name="ios-menu" size={24} color="black" />
-            </TouchableOpacity>
+            <View style={styles.toggleContainer}>
+                {/* <TouchableOpacity onPress={handleMenuToggle} style={styles.iconButton}>
+                    <Ionicons name="menu" size={24} color="black" />
+                </TouchableOpacity> */}
+                <TouchableOpacity onPress={handleSettingsPress} style={styles.iconButton}>
+                    <Ionicons name="settings" size={24} color="black" />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -27,7 +39,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        height: 60 + STATUS_BAR_HEIGHT, // total height including status bar
+        height: 60 + STATUS_BAR_HEIGHT,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
@@ -36,8 +48,13 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
     },
-    toggle: {
+    toggleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    iconButton: {
         padding: 8,
+        marginLeft: 8,
     },
 });
 
