@@ -1,35 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import verseAPI from '../api/verses';
+import useFetchData from '../hooks/useFetchData';
 import Loading from '../components/Loading';
+import STORAGE_KEYS from '../storage/database';
 
 export default function ChapterScreen({ route, navigation }) {
     const { chapterId } = route.params;
-    const [verses, setVerses] = useState([]);
+    const verses = useFetchData(
+        STORAGE_KEYS.VERSES(chapterId),
+        verseAPI.getVersesByChapter,
+        chapterId
+    );
 
-    useEffect(() => {
-        const load = async () => {
-            const data = await verseAPI.getVersesByChapter(chapterId);
-            setVerses(data);
-        };
-        load();
-    }, [chapterId]);
-
-    if (verses.length === 0) return <Loading />;
+    if (!verses) return <Loading />;
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Verses</Text>
+            <Text style={styles.header}>Chapter {chapterId} Verses List</Text>
             <FlatList
                 data={verses}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.verseCard}
-                        onPress={() => navigation.navigate('Verse', {
-                            chapterId,
-                            verseId: item.verse_number
-                        })}
+                        onPress={() =>
+                            navigation.navigate('Verse', {
+                                chapterId,
+                                verseId: item.verse_number,
+                            })
+                        }
                     >
                         <Text style={styles.verseTitle}>Verse {item.verse_number}</Text>
                         {item.text && (
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 16,
         marginBottom: 12,
-        elevation: 2, // Android shadow
-        shadowColor: '#000', // iOS shadow
+        elevation: 2,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,

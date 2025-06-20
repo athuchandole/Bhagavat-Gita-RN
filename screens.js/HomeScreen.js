@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import chapterAPI from '../api/chapters';
-
-import Screen from '../components/Screens';
+import useFetchData from '../hooks/useFetchData';
 import Loading from '../components/Loading';
+import STORAGE_KEYS from '../storage/database';
+import Screen from '../components/Screens';
 
 export default function HomeScreen({ navigation }) {
-    const [chapters, setChapters] = useState([]);
+    const chapters = useFetchData(STORAGE_KEYS.CHAPTERS, chapterAPI.getChapters);
 
-    useEffect(() => {
-        const load = async () => {
-            const data = await chapterAPI.getChapters();
-            setChapters(data);
-        };
-        load();
-    }, []);
-
-    if (chapters.length === 0) return <Loading />;
+    if (!chapters) return <Loading />;
 
     return (
         <Screen>
@@ -70,8 +63,8 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 10,
         marginBottom: 12,
-        elevation: 2, // for Android shadow
-        shadowColor: '#000', // for iOS shadow
+        elevation: 2,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
