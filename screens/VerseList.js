@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import verseAPI from '../api/verses';
 import chapterAPI from '../api/chapters';
@@ -8,13 +8,15 @@ import STORAGE_KEYS from '../storage/database';
 import Screen from '../components/Screens';
 import SummaryCard from '../components/SummaryCard';
 import VerseCard from '../components/VerseCard';
-import { useTheme } from '../Theme/ThemeContext'
-import Colors from '../Theme/colors'
+import { useTheme } from '../Theme/ThemeContext';
+import Colors from '../Theme/colors';
 
 export default function VerseList({ route, navigation }) {
     const { chapterId } = route.params;
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
+
+    const [isTranslated, setIsTranslated] = useState(false);
 
     const verses = useFetchData(
         STORAGE_KEYS.VERSES(chapterId),
@@ -26,6 +28,10 @@ export default function VerseList({ route, navigation }) {
     const currentChapter = chapters?.find((c) => c.id === chapterId);
 
     if (!verses) return <Loading />;
+
+    const handleToggleTranslation = () => {
+        setIsTranslated((prev) => !prev);
+    };
 
     return (
         <Screen>
@@ -39,7 +45,15 @@ export default function VerseList({ route, navigation }) {
                     keyExtractor={(item) => item.id.toString()}
                     ListHeaderComponent={
                         currentChapter ? (
-                            <SummaryCard summary={currentChapter.chapter_summary} />
+                            <SummaryCard
+                                summary={
+                                    isTranslated
+                                        ? currentChapter.chapter_summary_hindi
+                                        : currentChapter.chapter_summary
+                                }
+                                isTranslated={isTranslated}
+                                onToggleLanguage={handleToggleTranslation}
+                            />
                         ) : null
                     }
                     renderItem={({ item }) => (

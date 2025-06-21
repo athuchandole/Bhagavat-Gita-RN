@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
 
-const SummaryCard = ({ summary }) => {
+const SummaryCard = ({ summary, onToggleLanguage, isTranslated }) => {
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
 
@@ -11,6 +11,11 @@ const SummaryCard = ({ summary }) => {
         <View style={[styles.card, { backgroundColor: color.surface, shadowColor: color.text }]}>
             <Text style={[styles.title, { color: color.text }]}>📝 Summary:</Text>
             <Text style={[styles.text, { color: color.mutedText }]}>{summary}</Text>
+            <TouchableOpacity onPress={onToggleLanguage} style={styles.translateContainer}>
+                <Text style={[styles.translateText, { color: color.primary }]}>
+                    {isTranslated ? 'Translate' : 'Translate'}
+                </Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -33,6 +38,15 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 15,
         lineHeight: 22,
+    },
+    translateContainer: {
+        marginTop: 12,
+        alignSelf: 'flex-start',
+    },
+    translateText: {
+        fontSize: 14,
+        fontWeight: '600',
+        textDecorationLine: 'none',
     },
 });
 
