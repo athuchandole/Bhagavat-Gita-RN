@@ -1,20 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
 
 const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 44 : StatusBar.currentHeight || 24;
 
 const Header = ({ title }) => {
-    const navigation = useNavigation();
     const { themeMode } = useTheme();
     const themeColors = Colors[themeMode];
-
-    const handleSettingsPress = () => {
-        navigation.navigate('Settings');
-    };
 
     return (
         <View style={[styles.header, {
@@ -23,11 +16,7 @@ const Header = ({ title }) => {
             paddingTop: STATUS_BAR_HEIGHT
         }]}>
             <Text style={[styles.title, { color: themeColors.text }]}>{title}</Text>
-            <View style={styles.toggleContainer}>
-                <TouchableOpacity onPress={handleSettingsPress} style={styles.iconButton}>
-                    <Ionicons name="settings" size={24} color={themeColors.icon} />
-                </TouchableOpacity>
-            </View>
+            <View style={styles.toggleContainer} />
         </View>
     );
 };
@@ -48,10 +37,6 @@ const styles = StyleSheet.create({
     toggleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    iconButton: {
-        padding: 8,
-        marginLeft: 8,
     },
 });
 
