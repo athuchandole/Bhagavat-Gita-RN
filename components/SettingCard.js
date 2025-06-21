@@ -1,12 +1,42 @@
 import React from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../Theme/ThemeContext';
-import Colors from '../Theme/colors'; // Color palette
+import Colors from '../Theme/colors';
 
-const SettingCard = ({ icon, name, description, value, onToggle }) => {
-    const { themeMode } = useTheme(); // 'light' or 'dark'
+const SettingCard = ({ icon, name, description, type = 'toggle', value, onChange, options = [] }) => {
+    const { themeMode } = useTheme();
     const theme = Colors[themeMode];
+
+    const renderControl = () => {
+        switch (type) {
+            case 'toggle':
+                return (
+                    <Switch
+                        value={value}
+                        onValueChange={onChange}
+                        trackColor={{ false: theme.border, true: theme.primary }}
+                        thumbColor={value ? '#ffffff' : '#f4f3f4'}
+                    />
+                );
+            case 'select':
+                return (
+                    <Picker
+                        selectedValue={value}
+                        onValueChange={onChange}
+                        style={[styles.picker, { color: theme.text }]}
+                        dropdownIconColor={theme.icon}
+                    >
+                        {options.map((option) => (
+                            <Picker.Item key={option.value} label={option.label} value={option.value} />
+                        ))}
+                    </Picker>
+                );
+            default:
+                return null;
+        }
+    };
 
     return (
         <View style={[styles.card, { backgroundColor: theme.surface, borderColor: theme.border }]}>
@@ -15,12 +45,9 @@ const SettingCard = ({ icon, name, description, value, onToggle }) => {
                 <Text style={[styles.name, { color: theme.text }]}>{name}</Text>
                 <Text style={[styles.description, { color: theme.mutedText }]}>{description}</Text>
             </View>
-            <Switch
-                value={value}
-                onValueChange={onToggle}
-                trackColor={{ false: theme.border, true: theme.primary }}
-                thumbColor={value ? '#ffffff' : '#f4f3f4'}
-            />
+            <View style={styles.controlContainer}>
+                {renderControl()}
+            </View>
         </View>
     );
 };
@@ -48,6 +75,13 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 13,
         marginTop: 4,
+    },
+    controlContainer: {
+        marginLeft: 10,
+    },
+    picker: {
+        width: 130,
+        height: 50,
     },
 });
 
