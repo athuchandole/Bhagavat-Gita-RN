@@ -30,6 +30,7 @@ export default function ChapterList({ navigation }) {
                         />
                     )}
                     contentContainerStyle={styles.listContent}
+                    showsVerticalScrollIndicator={false}
                 />
             </View>
         </Screen>
