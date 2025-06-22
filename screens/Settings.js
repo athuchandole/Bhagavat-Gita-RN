@@ -3,21 +3,23 @@ import { ScrollView, Text, StyleSheet } from 'react-native';
 import SettingCard from '../components/SettingCard';
 import Colors from '../Theme/colors';
 import { useTheme } from '../Theme/ThemeContext';
+import translations from '../Translations/localization';
 
 const Settings = () => {
     const { themeMode, toggleTheme } = useTheme();
     const theme = Colors[themeMode];
 
-    const [language, setLanguage] = useState('en'); // default to English
+    const [language, setLanguage] = useState('en');
+    const t = translations[language]; // Choose current language
 
     return (
         <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-            <Text style={[styles.header, { color: theme.text }]}>Settings</Text>
+            <Text style={[styles.header, { color: theme.text }]}>{t.settings}</Text>
 
             <SettingCard
                 icon="moon"
-                name="Dark Mode"
-                description="Enable dark theme for the app"
+                name={t.darkMode}
+                description={t.darkModeDesc}
                 value={themeMode === 'dark'}
                 onChange={toggleTheme}
                 type="toggle"
@@ -25,15 +27,14 @@ const Settings = () => {
 
             <SettingCard
                 icon="language"
-                name="Default Language"
-                description="Select app language"
+                name={t.language}
+                description={t.languageDesc}
                 value={language}
                 onChange={setLanguage}
                 type="select"
                 options={[
                     { label: 'English', value: 'en' },
                     { label: 'Hindi', value: 'hi' },
-                    { label: 'Sanskrit', value: 'sa' },
                 ]}
             />
         </ScrollView>
