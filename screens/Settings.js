@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ScrollView, Text, StyleSheet } from 'react-native';
 import SettingCard from '../components/SettingCard';
 import Colors from '../Theme/colors';
 import { useTheme } from '../Theme/ThemeContext';
+import { useLanguage } from '../Theme/LanguageContext';
 import translations from '../Translations/localization';
 
 const Settings = () => {
     const { themeMode, toggleTheme } = useTheme();
+    const { language, changeLanguage } = useLanguage();
     const theme = Colors[themeMode];
-
-    const [language, setLanguage] = useState('en');
-    const t = translations[language]; // Choose current language
+    const t = translations[language];
 
     return (
         <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -30,7 +30,7 @@ const Settings = () => {
                 name={t.language}
                 description={t.languageDesc}
                 value={language}
-                onChange={setLanguage}
+                onChange={changeLanguage}
                 type="select"
                 options={[
                     { label: 'English', value: 'en' },

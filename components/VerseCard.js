@@ -1,12 +1,16 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { useTheme } from '../Theme/ThemeContext';
+import { useLanguage } from '../Theme/LanguageContext';
 import Colors from '../Theme/colors';
 import Feather from '@expo/vector-icons/Feather';
+import translations from '../Translations/localization';
 
 const VerseCard = ({ verseNumber, onPress }) => {
     const { themeMode } = useTheme();
+    const { language } = useLanguage();
     const color = Colors[themeMode];
+    const t = translations[language];
 
     return (
         <TouchableOpacity
@@ -22,13 +26,22 @@ const VerseCard = ({ verseNumber, onPress }) => {
             {/* Left: Icon + Verse number */}
             <View style={styles.left}>
                 <Feather name="feather" size={18} color={color.icon} style={styles.leftIcon} />
-                <Text style={[styles.title, { color: color.text }]}>Verse {verseNumber}</Text>
+
+                <View style={styles.titleWrapper}>
+                    <Text style={[styles.titleText, { color: color.text }]}>
+                        {t.VerseTitle} {verseNumber}
+                    </Text>
+                </View>
             </View>
 
             {/* Right: Bookmark + Check-circle */}
             <View style={styles.right}>
                 <Feather name="bookmark" size={20} color={color.icon} />
-                <Feather name="check-circle" size={20} color={themeMode === 'dark' ? '#34D399' : '#10B981'} />
+                <Feather
+                    name="check-circle"
+                    size={20}
+                    color={themeMode === 'dark' ? '#34D399' : '#10B981'}
+                />
             </View>
         </TouchableOpacity>
     );
@@ -50,13 +63,19 @@ const styles = StyleSheet.create({
     left: {
         flexDirection: 'row',
         alignItems: 'center',
+        flex: 1,
     },
     leftIcon: {
         marginRight: 15,
     },
-    title: {
+    titleWrapper: {
+        flexShrink: 1,
+        flexGrow: 1,
+    },
+    titleText: {
         fontSize: 18,
         fontWeight: '600',
+        flexWrap: 'wrap',
     },
     right: {
         flexDirection: 'row',

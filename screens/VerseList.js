@@ -9,12 +9,17 @@ import Screen from '../components/Screens';
 import SummaryCard from '../components/SummaryCard';
 import VerseCard from '../components/VerseCard';
 import { useTheme } from '../Theme/ThemeContext';
+import { useLanguage } from '../Theme/LanguageContext';
+import translations from '../Translations/localization';
+
 import Colors from '../Theme/colors';
 
 export default function VerseList({ route, navigation }) {
     const { chapterId } = route.params;
     const { themeMode } = useTheme();
+    const { language } = useLanguage();
     const color = Colors[themeMode];
+    const t = translations[language];
 
     const [isTranslated, setIsTranslated] = useState(false);
 
@@ -37,7 +42,7 @@ export default function VerseList({ route, navigation }) {
         <Screen>
             <View style={[styles.container, { backgroundColor: color.background }]}>
                 <Text style={[styles.header, { color: color.text }]}>
-                    Chapter {chapterId} Verses List
+                    {t.chapter} {chapterId} {t.versesList}
                 </Text>
 
                 <FlatList

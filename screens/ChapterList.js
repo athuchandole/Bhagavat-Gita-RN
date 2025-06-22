@@ -8,18 +8,25 @@ import Screen from '../components/Screens';
 import ChaptersCard from '../components/ChaptersCard';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
+import { useLanguage } from '../Theme/LanguageContext'; // ✅ language hook
+import translations from '../Translations/localization'; // ✅ translations
 
 export default function ChapterList({ navigation }) {
     const chapters = useFetchData(STORAGE_KEYS.CHAPTERS, chapterAPI.getChapters);
     const { themeMode } = useTheme();
     const theme = Colors[themeMode];
 
+    const { language } = useLanguage(); // ✅ get current language
+    const t = translations[language];   // ✅ localized strings
+
     if (!chapters) return <Loading />;
 
     return (
         <Screen>
             <View style={[styles.container, { backgroundColor: theme.background }]}>
-                <Text style={[styles.header, { color: theme.text }]}>Chapters</Text>
+                <Text style={[styles.header, { color: theme.text }]}>
+                    {t.chapter}
+                </Text>
                 <FlatList
                     data={chapters}
                     keyExtractor={(item) => item.id.toString()}

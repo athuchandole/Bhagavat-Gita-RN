@@ -1,12 +1,17 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useTheme } from '../Theme/ThemeContext';
+import { useLanguage } from '../Theme/LanguageContext'; // ✅ Language context
 import Colors from '../Theme/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+import translations from '../Translations/localization'; // ✅ Translations
 
 const ChaptersCard = ({ item, onPress }) => {
     const { themeMode } = useTheme();
     const theme = Colors[themeMode];
+
+    const { language } = useLanguage(); // ✅ Get selected language
+    const t = translations[language];   // ✅ Access localized strings
 
     return (
         <TouchableOpacity
@@ -24,7 +29,7 @@ const ChaptersCard = ({ item, onPress }) => {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                     >
-                        Chapter {item.chapter_number}
+                        {`${t.chapter} ${item.chapter_number}`}
                     </Text>
 
                     <Text
@@ -37,12 +42,11 @@ const ChaptersCard = ({ item, onPress }) => {
                 </View>
             </View>
 
-
             {/* Verses count with icon */}
             <View style={styles.row}>
                 <Icon name="document-text-outline" size={16} color={theme.mutedText} />
                 <Text style={[styles.subText, { color: theme.mutedText, marginLeft: 4 }]}>
-                    Total Verses ({item.verses_count})
+                    {`${t.totalVerses} (${item.verses_count})`}
                 </Text>
             </View>
         </TouchableOpacity>
@@ -70,7 +74,6 @@ const styles = StyleSheet.create({
         flexShrink: 1,
         flexWrap: 'wrap',
     },
-
     subText: {
         fontSize: 15,
         marginTop: 4,
@@ -85,13 +88,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: '900',
-        margin: 5,
-        flexShrink: 1,
-        flexWrap: 'wrap',
     },
 });
 
