@@ -1,10 +1,18 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
+import { useLanguage } from '../../Theme/LanguageContext';
+import translations from '../../Translations/localization';
 
 export default function MainText({ text, color }) {
+    const { language } = useLanguage();
+    const t = translations[language];
+
+
     return (
         <View style={styles.wrapper}>
-            <Text style={[styles.label, { color: color.h1 }]}>🕉️ Sanskrit Text</Text>
+            <Text style={[styles.label, { color: color.h1 }]}>
+                🕉️ {t.sanskritText}
+            </Text>
             <View style={[styles.card, {
                 backgroundColor: color.surface,
                 shadowColor: color.text,

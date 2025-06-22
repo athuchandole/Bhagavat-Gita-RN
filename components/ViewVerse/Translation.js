@@ -1,12 +1,19 @@
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { useLanguage } from '../../Theme/LanguageContext';
+import translations from '../../Translations/localization';
 
 export default function Translation({ translation, color, selectedLang, setSelectedLang }) {
+    const { language } = useLanguage();
+    const t = translations[language];
+
     const tabs = ['Sanskrit', 'Hindi', 'English'];
 
     return (
         <View style={styles.wrapper}>
-            <Text style={[styles.label, { color: color.h1 }]}>🔍 Translation</Text>
+            <Text style={[styles.label, { color: color.h1 }]}>
+                🔍 {t.translation}
+            </Text>
 
             <View style={styles.pillsContainer}>
                 {tabs.map((tab, index) => (
@@ -38,7 +45,7 @@ export default function Translation({ translation, color, selectedLang, setSelec
 
             <View style={[styles.card, { backgroundColor: color.surface, shadowColor: color.text }]}>
                 <Text style={[styles.content, { color: color.text }]}>
-                    {translation || 'No translation available.'}
+                    {translation || t.noTranslation}
                 </Text>
             </View>
         </View>

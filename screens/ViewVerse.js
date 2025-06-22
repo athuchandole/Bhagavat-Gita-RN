@@ -11,10 +11,16 @@ import MainText from '../components/ViewVerse/MainText';
 import Translation from '../components/ViewVerse/Translation';
 import Meaning from '../components/ViewVerse/Meaning';
 
+import { useLanguage } from '../Theme/LanguageContext'; // ✅ Import language context
+import translations from '../Translations/localization'; // ✅ Import translations
+
 export default function ViewVerse({ route }) {
     const { chapterId, verseId } = route.params;
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
+
+    const { language } = useLanguage(); // ✅ Get current language
+    const t = translations[language];   // ✅ Get translations
 
     // 🆕 Language tab state
     const [selectedLang, setSelectedLang] = useState('Hindi'); // Default tab
@@ -42,7 +48,7 @@ export default function ViewVerse({ route }) {
     return (
         <ScrollView contentContainerStyle={[styles.container, { backgroundColor: color.background }]}>
             <Text style={[styles.heading, { color: color.text }]}>
-                Chapter {chapterId} • Verse {verseId}
+                {t.chapter} {chapterId} • {t.VerseTitle} {verseId}
             </Text>
 
             <MainText text={verse.text} color={color} />
