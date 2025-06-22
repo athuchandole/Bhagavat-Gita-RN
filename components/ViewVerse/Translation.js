@@ -1,8 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 
-export default function Translation({ translation, color }) {
-    // Hardcoded pills for now
+export default function Translation({ translation, color, selectedLang, setSelectedLang }) {
     const tabs = ['Sanskrit', 'Hindi', 'English'];
 
     return (
@@ -11,8 +10,28 @@ export default function Translation({ translation, color }) {
 
             <View style={styles.pillsContainer}>
                 {tabs.map((tab, index) => (
-                    <TouchableOpacity key={index} style={[styles.pill, { backgroundColor: color.surface }]}>
-                        <Text style={[styles.pillText, { color: color.primary }]}>{tab}</Text>
+                    <TouchableOpacity
+                        key={index}
+                        onPress={() => setSelectedLang(tab)}
+                        style={[
+                            styles.pill,
+                            {
+                                backgroundColor:
+                                    selectedLang === tab ? color.primary : color.surface,
+                            },
+                        ]}
+                    >
+                        <Text
+                            style={[
+                                styles.pillText,
+                                {
+                                    color:
+                                        selectedLang === tab ? color.onPrimary : color.primary,
+                                },
+                            ]}
+                        >
+                            {tab}
+                        </Text>
                     </TouchableOpacity>
                 ))}
             </View>

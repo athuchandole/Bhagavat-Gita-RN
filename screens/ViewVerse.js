@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, StyleSheet, ScrollView } from 'react-native';
 import verseAPI from '../api/verses';
 import useFetchData from '../hooks/useFetchData';
@@ -16,6 +16,10 @@ export default function ViewVerse({ route }) {
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
 
+    // 🆕 Language tab state
+    const [selectedLang, setSelectedLang] = useState('Hindi'); // Default tab
+
+    // 📦 Fetch verse data
     const verse = useFetchData(
         STORAGE_KEYS.VERSE(chapterId, verseId),
         verseAPI.getVerse,
@@ -23,7 +27,17 @@ export default function ViewVerse({ route }) {
         verseId
     );
 
+    // ⏳ Loading state
     if (!verse) return <Loading />;
+
+    // 🧠 Match tab to translation index
+    const langMap = {
+        Sanskrit: 0,
+        Hindi: 1,
+        English: 2,
+    };
+
+    const translation = verse.translations?.[langMap[selectedLang]]?.description;
 
     return (
         <ScrollView contentContainerStyle={[styles.container, { backgroundColor: color.background }]}>
@@ -32,7 +46,12 @@ export default function ViewVerse({ route }) {
             </Text>
 
             <MainText text={verse.text} color={color} />
-            <Translation translation={verse.translations?.[0]?.description} color={color} />
+            <Translation
+                translation={translation}
+                color={color}
+                selectedLang={selectedLang}
+                setSelectedLang={setSelectedLang}
+            />
             <Meaning meaning={verse.word_meanings} color={color} />
         </ScrollView>
     );
