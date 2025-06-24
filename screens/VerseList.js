@@ -2,41 +2,29 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import verseAPI from '../api/verses';
 import chapterAPI from '../api/chapters';
-import useFetchData from '../hooks/useFetchData';
+import useLiveFetch from '../hooks/useLiveFetch';
 import Loading from '../components/Loading';
-import STORAGE_KEYS from '../storage/database';
 import Screen from '../components/Screens';
 import SummaryCard from '../components/SummaryCard';
 import VerseCard from '../components/VerseCard';
 import { useTheme } from '../Theme/ThemeContext';
+import Colors from '../Theme/colors';
 import { useLanguage } from '../Theme/LanguageContext';
 import translations from '../Translations/localization';
 
-import Colors from '../Theme/colors';
-
 export default function VerseList({ route, navigation }) {
     const { chapterId } = route.params;
-    const { themeMode } = useTheme();
-    const { language } = useLanguage();
-    const color = Colors[themeMode];
-    const t = translations[language];
-
     const [isTranslated, setIsTranslated] = useState(false);
-
-    const verses = useFetchData(
-        STORAGE_KEYS.VERSES(chapterId),
-        verseAPI.getVersesByChapter,
-        chapterId
-    );
-
-    const chapters = useFetchData(STORAGE_KEYS.CHAPTERS, chapterAPI.getChapters);
+    const verses = useLiveFetch(verseAPI.getVersesByChapter, chapterId);
+    const chapters = useLiveFetch(chapterAPI.getChapters);
     const currentChapter = chapters?.find((c) => c.id === chapterId);
 
-    if (!verses) return <Loading />;
+    const { themeMode } = useTheme();
+    const color = Colors[themeMode];
+    const { language } = useLanguage();
+    const t = translations[language];
 
-    const handleToggleTranslation = () => {
-        setIsTranslated((prev) => !prev);
-    };
+    if (!verses) return <Loading />;
 
     return (
         <Screen>
@@ -57,7 +45,7 @@ export default function VerseList({ route, navigation }) {
                                         : currentChapter.chapter_summary
                                 }
                                 isTranslated={isTranslated}
-                                onToggleLanguage={handleToggleTranslation}
+                                onToggleLanguage={() => setIsTranslated((prev) => !prev)}
                             />
                         ) : null
                     }

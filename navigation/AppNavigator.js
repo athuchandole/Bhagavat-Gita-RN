@@ -11,22 +11,25 @@ import { ThemeProvider } from '../Theme/ThemeContext';
 import { LanguageProvider } from '../Theme/LanguageContext';
 const Stack = createNativeStackNavigator();
 
-const AppNavigator = () => (
-    <ThemeProvider>
-        <LanguageProvider>
-            <NavigationContainer>
-                <Stack.Navigator
-                    screenOptions={{
-                        header: () => <Header title="Bhagavat Gita" />
-                    }}
-                >
-                    <Stack.Screen name="Tabs" component={TabNavigator} />
-                    <Stack.Screen name="Chapter" component={VerseList} />
-                    <Stack.Screen name="Verse" component={ViewVerse} />
-                </Stack.Navigator>
-            </NavigationContainer>
-        </LanguageProvider>
-    </ThemeProvider>
-);
+const AppNavigator = () => {
+    console.log('[NAVIGATION] AppNavigator initialized');
+    return (
+        <ThemeProvider>
+            <LanguageProvider>
+                <NavigationContainer>
+                    <Stack.Navigator
+                        screenOptions={{
+                            header: () => <Header title="Bhagavat Gita" />
+                        }}
+                    >
+                        <Stack.Screen name="Tabs" component={TabNavigator} />
+                        <Stack.Screen name="Chapter" component={VerseList} />
+                        <Stack.Screen name="Verse" component={ViewVerse} />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </LanguageProvider>
+        </ThemeProvider>
+    );
+};
 
 export default AppNavigator;

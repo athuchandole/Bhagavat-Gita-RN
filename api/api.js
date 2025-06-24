@@ -1,5 +1,7 @@
 import { create } from 'apisauce';
 
+console.log('[INIT] API client created');
+
 const api = create({
     baseURL: 'https://bhagavad-gita3.p.rapidapi.com/v2',
     headers: {

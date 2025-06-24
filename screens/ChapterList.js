@@ -1,32 +1,28 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import chapterAPI from '../api/chapters';
-import useFetchData from '../hooks/useFetchData';
+import useLiveFetch from '../hooks/useLiveFetch';
 import Loading from '../components/Loading';
-import STORAGE_KEYS from '../storage/database';
 import Screen from '../components/Screens';
 import ChaptersCard from '../components/ChaptersCard';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
-import { useLanguage } from '../Theme/LanguageContext'; // ✅ language hook
-import translations from '../Translations/localization'; // ✅ translations
+import { useLanguage } from '../Theme/LanguageContext';
+import translations from '../Translations/localization';
 
 export default function ChapterList({ navigation }) {
-    const chapters = useFetchData(STORAGE_KEYS.CHAPTERS, chapterAPI.getChapters);
+    const chapters = useLiveFetch(chapterAPI.getChapters);
     const { themeMode } = useTheme();
     const theme = Colors[themeMode];
-
-    const { language } = useLanguage(); // ✅ get current language
-    const t = translations[language];   // ✅ localized strings
+    const { language } = useLanguage();
+    const t = translations[language];
 
     if (!chapters) return <Loading />;
 
     return (
         <Screen>
             <View style={[styles.container, { backgroundColor: theme.background }]}>
-                <Text style={[styles.header, { color: theme.text }]}>
-                    {t.chapter}
-                </Text>
+                <Text style={[styles.header, { color: theme.text }]}>{t.chapter}</Text>
                 <FlatList
                     data={chapters}
                     keyExtractor={(item) => item.id.toString()}

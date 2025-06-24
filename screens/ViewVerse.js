@@ -1,56 +1,38 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, ScrollView } from 'react-native';
 import verseAPI from '../api/verses';
-import useFetchData from '../hooks/useFetchData';
+import useLiveFetch from '../hooks/useLiveFetch';
 import Loading from '../components/Loading';
-import STORAGE_KEYS from '../storage/database';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
-
 import MainText from '../components/ViewVerse/MainText';
 import Translation from '../components/ViewVerse/Translation';
 import Meaning from '../components/ViewVerse/Meaning';
-
-import { useLanguage } from '../Theme/LanguageContext'; // ✅ Import language context
-import translations from '../Translations/localization'; // ✅ Import translations
+import { useLanguage } from '../Theme/LanguageContext';
+import translations from '../Translations/localization';
 
 export default function ViewVerse({ route }) {
     const { chapterId, verseId } = route.params;
+    const verse = useLiveFetch(verseAPI.getVerse, chapterId, verseId);
+
+    const [selectedLang, setSelectedLang] = useState('Hindi');
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
+    const { language } = useLanguage();
+    const t = translations[language];
 
-    const { language } = useLanguage(); // ✅ Get current language
-    const t = translations[language];   // ✅ Get translations
-
-    // 🆕 Language tab state
-    const [selectedLang, setSelectedLang] = useState('Hindi'); // Default tab
-
-    // 📦 Fetch verse data
-    const verse = useFetchData(
-        STORAGE_KEYS.VERSE(chapterId, verseId),
-        verseAPI.getVerse,
-        chapterId,
-        verseId
-    );
-
-    // ⏳ Loading state
     if (!verse) return <Loading />;
 
-    // 🧠 Match tab to translation index
     const langMap = {
         Sanskrit: 0,
         Hindi: 1,
         English: 2,
     };
-
     const translation = verse.translations?.[langMap[selectedLang]]?.description;
 
     return (
         <ScrollView contentContainerStyle={[styles.container, { backgroundColor: color.background }]}>
-            <Text style={[styles.heading, { color: color.text }]}>
-                {t.chapter} {chapterId} • {t.VerseTitle} {verseId}
-            </Text>
-
+            <Text style={[styles.heading, { color: color.text }]}> {t.chapter} {chapterId} • {t.VerseTitle} {verseId} </Text>
             <MainText text={verse.text} color={color} />
             <Translation
                 translation={translation}
