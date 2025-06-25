@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import chapterAPI from '../api/chapters';
-import useLiveFetch from '../hooks/useLiveFetch';
+import useLocalFetch from '../hooks/useLocalFetch'; // Updated hook
 import Loading from '../components/Loading';
 import Screen from '../components/Screens';
 import ChaptersCard from '../components/ChaptersCard';
@@ -11,7 +11,7 @@ import { useLanguage } from '../Theme/LanguageContext';
 import translations from '../Translations/localization';
 
 export default function ChapterList({ navigation }) {
-    const chapters = useLiveFetch(chapterAPI.getChapters);
+    const chapters = useLocalFetch('chapters', chapterAPI.getChapters);
     const { themeMode } = useTheme();
     const theme = Colors[themeMode];
     const { language } = useLanguage();

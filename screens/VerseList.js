@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import verseAPI from '../api/verses';
 import chapterAPI from '../api/chapters';
-import useLiveFetch from '../hooks/useLiveFetch';
+import useLocalFetch from '../hooks/useLocalFetch'; // Updated hook
 import Loading from '../components/Loading';
 import Screen from '../components/Screens';
 import SummaryCard from '../components/SummaryCard';
@@ -15,8 +15,9 @@ import translations from '../Translations/localization';
 export default function VerseList({ route, navigation }) {
     const { chapterId } = route.params;
     const [isTranslated, setIsTranslated] = useState(false);
-    const verses = useLiveFetch(verseAPI.getVersesByChapter, chapterId);
-    const chapters = useLiveFetch(chapterAPI.getChapters);
+
+    const verses = useLocalFetch(`verses_${chapterId}`, verseAPI.getVersesByChapter, chapterId);
+    const chapters = useLocalFetch('chapters', chapterAPI.getChapters);
     const currentChapter = chapters?.find((c) => c.id === chapterId);
 
     const { themeMode } = useTheme();
