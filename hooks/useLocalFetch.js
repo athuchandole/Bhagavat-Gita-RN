@@ -1,27 +1,42 @@
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function useLocalFetch(key, fetchFn, ...params) {
+export default function useLocalFetch(key, fetchFunction) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        (async () => {
+        const loadData = async () => {
+            console.log(`[FETCH] useLocalFetch started for key: ${key}`);
+
             try {
-                const cached = await AsyncStorage.getItem(key);
-                if (cached) {
-                    setData(JSON.parse(cached));
-                    console.log(`[CACHE] Loaded from AsyncStorage: ${key}`);
+                const localData = await AsyncStorage.getItem(key);
+                if (localData) {
+                    console.log(`[LOCAL] Found data in AsyncStorage for key: ${key}`);
+                    setData(JSON.parse(localData));
+                    return;
                 } else {
-                    const result = await fetchFn(...params);
-                    setData(result);
-                    await AsyncStorage.setItem(key, JSON.stringify(result));
-                    console.log(`[FETCH] Saved to AsyncStorage: ${key}`);
+                    console.log(`[LOCAL] No local data found for key: ${key}`);
                 }
-            } catch (e) {
-                console.error('Error in useLocalFetch:', e);
+
+                const remoteData = await fetchFunction();
+                if (remoteData && remoteData.length > 0) {
+                    console.log(`[API] Fetched data from API for key: ${key}`);
+                    await AsyncStorage.setItem(key, JSON.stringify(remoteData));
+                    console.log(`[STORAGE] Saved API data to AsyncStorage for key: ${key}`);
+                    setData(remoteData);
+                } else {
+                    console.log(`[API] No data returned from API for key: ${key}`);
+                    setData([]);
+                }
+
+            } catch (error) {
+                console.error(`[ERROR] useLocalFetch error for key: ${key}`, error);
+                setData([]);
             }
-        })();
-    }, [key, fetchFn, ...params]);
+        };
+
+        loadData();
+    }, [key, fetchFunction]);
 
     return data;
 }

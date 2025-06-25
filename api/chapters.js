@@ -1,9 +1,9 @@
-import api from './api';
+import { getApiClient } from './api';
 
 const getChapters = async () => {
     console.log('[FETCH] getChapters called');
-    const response = await api.get('/chapters/');
-    console.log('[RESPONSE] getChapters:', response.ok);
+    const response = await getApiClient().get('/chapters/');
+    console.log('[RESPONSE] getChapters status:', response.ok);
     return response.ok ? response.data : [];
 };
 

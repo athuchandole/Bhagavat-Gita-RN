@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import chapterAPI from '../api/chapters';
-import useLocalFetch from '../hooks/useLocalFetch'; // Updated hook
+import useLocalFetch from '../hooks/useLocalFetch';
 import Loading from '../components/Loading';
 import Screen from '../components/Screens';
 import ChaptersCard from '../components/ChaptersCard';
