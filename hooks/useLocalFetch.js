@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-export default function useLocalFetch(key, fetchFunction, param) {
+export default function useLocalFetch(key, fetchFunction, ...params) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -19,25 +18,25 @@ export default function useLocalFetch(key, fetchFunction, param) {
                     console.log(`[LOCAL] No local data found for key: ${key}`);
                 }
 
-                const remoteData = param !== undefined ? await fetchFunction(param) : await fetchFunction();
-                if (remoteData && remoteData.length > 0) {
+                const remoteData = await fetchFunction(...params);
+                if (remoteData) {
                     console.log(`[API] Fetched data from API for key: ${key}`);
                     await AsyncStorage.setItem(key, JSON.stringify(remoteData));
                     console.log(`[STORAGE] Saved API data to AsyncStorage for key: ${key}`);
                     setData(remoteData);
                 } else {
                     console.log(`[API] No data returned from API for key: ${key}`);
-                    setData([]);
+                    setData(null);
                 }
 
             } catch (error) {
                 console.error(`[ERROR] useLocalFetch error for key: ${key}`, error);
-                setData([]);
+                setData(null);
             }
         };
 
         loadData();
-    }, [key, fetchFunction, param]);
+    }, [key, fetchFunction, ...params]);
 
     return data;
 }
