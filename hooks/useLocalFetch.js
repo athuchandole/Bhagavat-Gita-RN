@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function useLocalFetch(key, fetchFunction) {
+
+export default function useLocalFetch(key, fetchFunction, param) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -18,7 +19,7 @@ export default function useLocalFetch(key, fetchFunction) {
                     console.log(`[LOCAL] No local data found for key: ${key}`);
                 }
 
-                const remoteData = await fetchFunction();
+                const remoteData = param !== undefined ? await fetchFunction(param) : await fetchFunction();
                 if (remoteData && remoteData.length > 0) {
                     console.log(`[API] Fetched data from API for key: ${key}`);
                     await AsyncStorage.setItem(key, JSON.stringify(remoteData));
@@ -36,7 +37,7 @@ export default function useLocalFetch(key, fetchFunction) {
         };
 
         loadData();
-    }, [key, fetchFunction]);
+    }, [key, fetchFunction, param]);
 
     return data;
 }

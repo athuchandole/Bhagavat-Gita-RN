@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import verseAPI from '../api/verses';
 import chapterAPI from '../api/chapters';
-import useLocalFetch from '../hooks/useLocalFetch'; // Updated hook
+import useLocalFetch from '../hooks/useLocalFetch';
 import Loading from '../components/Loading';
 import Screen from '../components/Screens';
 import SummaryCard from '../components/SummaryCard';
@@ -16,6 +16,7 @@ export default function VerseList({ route, navigation }) {
     const { chapterId } = route.params;
     const [isTranslated, setIsTranslated] = useState(false);
 
+    // ✅ Load verses and chapters locally
     const verses = useLocalFetch(`verses_${chapterId}`, verseAPI.getVersesByChapter, chapterId);
     const chapters = useLocalFetch('chapters', chapterAPI.getChapters);
     const currentChapter = chapters?.find((c) => c.id === chapterId);
