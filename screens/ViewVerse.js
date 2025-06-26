@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Icon
 import verseAPI from '../api/verses';
-import useLocalFetch from '../hooks/useLocalFetch'; // Updated hook
+import useLocalFetch from '../hooks/useLocalFetch';
 import Loading from '../components/Loading';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
@@ -11,15 +12,36 @@ import Meaning from '../components/ViewVerse/Meaning';
 import { useLanguage } from '../Theme/LanguageContext';
 import translations from '../Translations/localization';
 
+import {
+    addBookmark,
+    removeBookmark,
+    isBookmarked,
+} from '../storage/bookmarkStorage';
+
 export default function ViewVerse({ route }) {
     const { chapterId, verseId } = route.params;
-    const verse = useLocalFetch(`verse_${chapterId}_${verseId}`, verseAPI.getVerse, chapterId, verseId);
+    const verseKey = `verse_${chapterId}_${verseId}`;
+    const verse = useLocalFetch(verseKey, verseAPI.getVerse, chapterId, verseId);
 
     const [selectedLang, setSelectedLang] = useState('Hindi');
+    const [bookmarked, setBookmarked] = useState(false);
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
     const { language } = useLanguage();
     const t = translations[language];
+
+    useEffect(() => {
+        isBookmarked(verseKey).then(setBookmarked);
+    }, [verseKey]);
+
+    const toggleBookmark = async () => {
+        if (bookmarked) {
+            await removeBookmark(verseKey);
+        } else {
+            await addBookmark(verseKey);
+        }
+        setBookmarked(!bookmarked);
+    };
 
     if (!verse) return <Loading />;
 
@@ -35,6 +57,15 @@ export default function ViewVerse({ route }) {
             <Text style={[styles.heading, { color: color.text }]}>
                 {t.chapter} {chapterId} • {t.VerseTitle} {verseId}
             </Text>
+
+            <TouchableOpacity onPress={toggleBookmark} style={styles.bookmarkBtn}>
+                <Ionicons
+                    name={bookmarked ? 'bookmark' : 'bookmark-outline'}
+                    size={24}
+                    color={color.primary}
+                />
+            </TouchableOpacity>
+
             <MainText text={verse.text} color={color} />
             <Translation
                 translation={translation}
@@ -50,11 +81,17 @@ export default function ViewVerse({ route }) {
 const styles = StyleSheet.create({
     container: {
         padding: 24,
+        position: 'relative',
     },
     heading: {
         fontSize: 22,
         fontWeight: '700',
         marginBottom: 20,
         textAlign: 'center',
+    },
+    bookmarkBtn: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
     },
 });
