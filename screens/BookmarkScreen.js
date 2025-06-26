@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { getBookmarks } from '../storage/bookmarkStorage';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
+import BookmarkCard from '../components/BookmarkCard'; // path depends on your structure
 
 export default function BookmarkScreen() {
     const [bookmarks, setBookmarks] = useState([]);
@@ -11,13 +12,12 @@ export default function BookmarkScreen() {
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
 
-    // Load bookmarks every time the screen is focused
     useFocusEffect(
         useCallback(() => {
             const loadBookmarks = async () => {
                 const data = await getBookmarks();
                 setBookmarks(data);
-                console.log('📌 BookmarkScreen: loaded', data.length, 'bookmarks');
+                console.log('✅ BookmarkScreen: bookmarks loaded 🚀');
             };
             loadBookmarks();
         }, [])
@@ -38,19 +38,16 @@ export default function BookmarkScreen() {
                 renderItem={({ item }) => {
                     const { chapterId, verseId } = parseKey(item);
                     return (
-                        <TouchableOpacity
-                            style={[styles.item, { backgroundColor: color.card }]}
+                        <BookmarkCard
+                            chapterId={chapterId}
+                            verseId={verseId}
                             onPress={() =>
                                 navigation.navigate('Verse', {
                                     chapterId,
                                     verseId,
                                 })
                             }
-                        >
-                            <Text style={{ color: color.text }}>
-                                Chapter {chapterId} • Verse {verseId}
-                            </Text>
-                        </TouchableOpacity>
+                        />
                     );
                 }}
                 ListEmptyComponent={
@@ -73,10 +70,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
-    },
-    item: {
-        padding: 16,
-        borderRadius: 12,
-        marginBottom: 12,
     },
 });
