@@ -11,7 +11,7 @@ export default function BookmarkScreen() {
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
 
-    // ✅ Load bookmarks every time this screen is focused
+    // Load bookmarks every time the screen is focused
     useFocusEffect(
         useCallback(() => {
             const loadBookmarks = async () => {
@@ -23,13 +23,9 @@ export default function BookmarkScreen() {
         }, [])
     );
 
-    // ✅ Parse bookmark key into chapter/verse ID
     const parseKey = (key) => {
-        const parts = key.split('_');
-        return {
-            chapterId: parts[1],
-            verseId: parts[2],
-        };
+        const [_, chapterId, verseId] = key.split('_');
+        return { chapterId, verseId };
     };
 
     return (
@@ -41,12 +37,11 @@ export default function BookmarkScreen() {
                 keyExtractor={(item) => item}
                 renderItem={({ item }) => {
                     const { chapterId, verseId } = parseKey(item);
-
                     return (
                         <TouchableOpacity
                             style={[styles.item, { backgroundColor: color.card }]}
                             onPress={() =>
-                                navigation.navigate('ViewVerse', {
+                                navigation.navigate('Verse', {
                                     chapterId,
                                     verseId,
                                 })
