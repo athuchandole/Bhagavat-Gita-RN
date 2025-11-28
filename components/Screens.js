@@ -1,21 +1,24 @@
 import React from "react";
-import { StyleSheet, SafeAreaView, View } from "react-native";
+import { StyleSheet, SafeAreaView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-function Screen({ children, style }) {
+function Screen({ children, style, contentContainerStyle }) {
     const insets = useSafeAreaInsets();
-    const bottomNavHeight = insets.bottom;
 
     return (
-        <SafeAreaView style={[styles.screen, { paddingBottom: bottomNavHeight }, style]}>
-            <View style={[styles.view]}>{children}</View>
+        <SafeAreaView
+            style={[styles.screen, { paddingTop: insets.top, paddingBottom: insets.bottom }, style]}
+        >
+            <SafeAreaView style={[styles.content, contentContainerStyle]}>
+                {children}
+            </SafeAreaView>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     screen: { flex: 1, backgroundColor: "#fff" },
-    view: { flex: 1 },
+    content: { flex: 1 },
 });
 
 export default Screen;

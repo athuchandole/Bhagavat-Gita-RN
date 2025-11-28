@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, FlatList, Text, TouchableOpacity } from 'react-native';
+import { View, FlatList, Text } from 'react-native';
 import VerseCard from '../components/VerseCard';
 import useLocalFetch from '../hooks/useLocalFetch';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
+import Screen from '../components/Screens';
 
 export default function VerseList({ route, navigation }) {
     const { chapterId } = route.params;
@@ -13,7 +14,10 @@ export default function VerseList({ route, navigation }) {
     const { data: verses, loading } = useLocalFetch(`verses_${chapterId}`);
 
     return (
-        <View style={{ flex: 1, backgroundColor: theme.surface, padding: 10 }}>
+        <Screen
+            style={{ backgroundColor: theme.surface }}
+            contentContainerStyle={{ padding: 10 }}
+        >
             {loading ? (
                 <Text style={{ color: theme.text }}>Loading verses...</Text>
             ) : (
@@ -33,6 +37,6 @@ export default function VerseList({ route, navigation }) {
                     )}
                 />
             )}
-        </View>
+        </Screen>
     );
 }

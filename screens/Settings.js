@@ -5,6 +5,7 @@ import Colors from '../Theme/colors';
 import { useTheme } from '../Theme/ThemeContext';
 import { useLanguage } from '../Theme/LanguageContext';
 import translations from '../Translations/localization';
+import Screen from '../components/Screens';
 
 const Settings = () => {
     const { themeMode, toggleTheme } = useTheme();
@@ -13,31 +14,36 @@ const Settings = () => {
     const t = translations[language];
 
     return (
-        <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-            <Text style={[styles.header, { color: theme.text }]}>{t.settings}</Text>
+        <Screen
+            style={{ backgroundColor: theme.background }}
+            contentContainerStyle={{ flex: 1, paddingBottom: 20 }}
+        >
+            <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+                <Text style={[styles.header, { color: theme.text }]}>{t.settings}</Text>
 
-            <SettingCard
-                icon="moon"
-                name={t.darkMode}
-                description={t.darkModeDesc}
-                value={themeMode === 'dark'}
-                onChange={toggleTheme}
-                type="toggle"
-            />
+                <SettingCard
+                    icon="moon"
+                    name={t.darkMode}
+                    description={t.darkModeDesc}
+                    value={themeMode === 'dark'}
+                    onChange={toggleTheme}
+                    type="toggle"
+                />
 
-            <SettingCard
-                icon="language"
-                name={t.language}
-                description={t.languageDesc}
-                value={language}
-                onChange={changeLanguage}
-                type="select"
-                options={[
-                    { label: 'English', value: 'en' },
-                    { label: 'Hindi', value: 'hi' },
-                ]}
-            />
-        </ScrollView>
+                <SettingCard
+                    icon="language"
+                    name={t.language}
+                    description={t.languageDesc}
+                    value={language}
+                    onChange={changeLanguage}
+                    type="select"
+                    options={[
+                        { label: 'English', value: 'en' },
+                        { label: 'Hindi', value: 'hi' },
+                    ]}
+                />
+            </ScrollView>
+        </Screen>
     );
 };
 

@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { Text, StyleSheet, FlatList } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { getBookmarks } from '../storage/bookmarkStorage';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
 import BookmarkCard from '../components/BookmarkCard';
+import Screen from '../components/Screens';
 
 export default function BookmarkScreen() {
     const [bookmarks, setBookmarks] = useState([]);
@@ -12,28 +13,27 @@ export default function BookmarkScreen() {
     const { themeMode } = useTheme();
     const color = Colors[themeMode];
 
+    // Load bookmarks every time screen focuses
     useFocusEffect(
         useCallback(() => {
             let mounted = true;
             const loadBookmarks = async () => {
                 const data = await getBookmarks();
-                if (mounted) {
-                    setBookmarks(data);
-                    console.log('✅ BookmarkScreen: bookmarks loaded');
-                }
+                if (mounted) setBookmarks(data);
             };
             loadBookmarks();
             return () => { mounted = false; };
         }, [])
     );
 
+    // Parse key like "verse_1_5"
     const parseKey = (key) => {
         const [_, chapterId, verseId] = key.split('_');
-        return { chapterId, verseId };
+        return { chapterId: Number(chapterId), verseId: Number(verseId) };
     };
 
     return (
-        <View style={[styles.container, { backgroundColor: color.background }]}>
+        <Screen style={{ backgroundColor: color.background }} contentContainerStyle={{ padding: 20 }}>
             <Text style={[styles.title, { color: color.text }]}>🔖 Bookmarked Verses</Text>
             <FlatList
                 data={bookmarks}
@@ -45,10 +45,8 @@ export default function BookmarkScreen() {
                             chapterId={chapterId}
                             verseId={verseId}
                             onPress={() =>
-                                navigation.navigate('Verse', {
-                                    chapterId,
-                                    verseId,
-                                })
+                                navigation.navigate('VerseScreen', { chapterId, verseId })
+
                             }
                         />
                     );
@@ -59,12 +57,11 @@ export default function BookmarkScreen() {
                     </Text>
                 }
             />
-        </View>
+        </Screen>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20 },
     title: {
         fontSize: 22,
         fontWeight: 'bold',
