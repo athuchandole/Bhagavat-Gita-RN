@@ -4,7 +4,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { getBookmarks } from '../storage/bookmarkStorage';
 import { useTheme } from '../Theme/ThemeContext';
 import Colors from '../Theme/colors';
-import BookmarkCard from '../components/BookmarkCard'; // path depends on your structure
+import BookmarkCard from '../components/BookmarkCard';
 
 export default function BookmarkScreen() {
     const [bookmarks, setBookmarks] = useState([]);
@@ -14,12 +14,16 @@ export default function BookmarkScreen() {
 
     useFocusEffect(
         useCallback(() => {
+            let mounted = true;
             const loadBookmarks = async () => {
                 const data = await getBookmarks();
-                setBookmarks(data);
-                console.log('✅ BookmarkScreen: bookmarks loaded 🚀');
+                if (mounted) {
+                    setBookmarks(data);
+                    console.log('✅ BookmarkScreen: bookmarks loaded');
+                }
             };
             loadBookmarks();
+            return () => { mounted = false; };
         }, [])
     );
 
@@ -31,7 +35,6 @@ export default function BookmarkScreen() {
     return (
         <View style={[styles.container, { backgroundColor: color.background }]}>
             <Text style={[styles.title, { color: color.text }]}>🔖 Bookmarked Verses</Text>
-
             <FlatList
                 data={bookmarks}
                 keyExtractor={(item) => item}
@@ -61,10 +64,7 @@ export default function BookmarkScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-    },
+    container: { flex: 1, padding: 20 },
     title: {
         fontSize: 22,
         fontWeight: 'bold',

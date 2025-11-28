@@ -42,16 +42,8 @@ const Settings = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginTop: 16,
-        marginBottom: 8,
-        marginLeft: 16,
-    },
+    container: { flex: 1 },
+    header: { fontSize: 24, fontWeight: 'bold', marginTop: 16, marginBottom: 8, marginLeft: 16 },
 });
 
 export default Settings;

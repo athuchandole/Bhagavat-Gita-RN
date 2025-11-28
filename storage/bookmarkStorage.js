@@ -1,4 +1,3 @@
-// src/storage/bookmarkStorage.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BOOKMARK_KEY = 'BOOKMARKS';

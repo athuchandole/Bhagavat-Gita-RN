@@ -4,12 +4,13 @@ export default function useLiveFetch(fetchFn, ...params) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        console.log('[HOOK] useLiveFetch triggered with params:', params);
+        let mounted = true;
         (async () => {
+            console.log('[HOOK] useLiveFetch triggered', params);
             const result = await fetchFn(...params);
-            console.log('HOOK RESULT Here');
-            setData(result);
+            if (mounted) setData(result);
         })();
+        return () => (mounted = false);
     }, [fetchFn, ...params]);
 
     return data;

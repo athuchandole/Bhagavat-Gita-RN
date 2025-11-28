@@ -1,20 +1,34 @@
-import { getApiClient } from './api';
+import data from '../json/alldata.json';
 
 const getVersesByChapter = async (chapterId) => {
-    console.log(`[FETCH] getVersesByChapter called with chapterId=${chapterId}`);
-    const response = await getApiClient().get(`/chapters/${chapterId}/verses/`);
-    console.log(`[RESPONSE] getVersesByChapter: ${response.ok}`);
-    return response.ok ? response.data : [];
+    console.log(`[LOCAL] getVersesByChapter chapterId=${chapterId}`);
+
+    const all = data.VERSES;
+
+    if (!Array.isArray(all)) {
+        console.log('[LOCAL] VERSES is not an array');
+        return [];
+    }
+
+    const chapterIndex = Number(chapterId) - 1;
+
+    if (!all[chapterIndex]) {
+        console.log('[LOCAL] chapterIndex missing for', chapterId);
+        return [];
+    }
+
+    return all[chapterIndex];
 };
 
-const getVerse = async (chapterId, verseId) => {
-    console.log(`[FETCH] getVerse called with chapterId=${chapterId}, verseId=${verseId}`);
-    const response = await getApiClient().get(`/chapters/${chapterId}/verses/`);
-    console.log(`[RESPONSE] getVerse: ${response.ok}`);
-    const verses = response.ok ? response.data : [];
-    const result = verses.find((v) => String(v.verse_number) === String(verseId)) || null;
-    console.log(`[MATCHED] Verse data: ${result ? 'Found' : 'Not found'}`);
-    return result;
+const getVerse = async (chapterId, verseNumber) => {
+    const verses = await getVersesByChapter(chapterId);
+
+    return verses.find(
+        (v) => Number(v.verse_number) === Number(verseNumber)
+    );
 };
 
-export default { getVersesByChapter, getVerse };
+export default {
+    getVersesByChapter,
+    getVerse,
+};

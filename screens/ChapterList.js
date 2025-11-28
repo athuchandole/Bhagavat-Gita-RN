@@ -1,58 +1,36 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import chapterAPI from '../api/chapters';
-import useLocalFetch from '../hooks/useLocalFetch';
-import Loading from '../components/Loading';
-import Screen from '../components/Screens';
+import React, { useEffect, useState } from 'react';
+import { View, FlatList, Text } from 'react-native';
 import ChaptersCard from '../components/ChaptersCard';
-import { useTheme } from '../Theme/ThemeContext';
+import Header from '../components/Header';
 import Colors from '../Theme/colors';
-import { useLanguage } from '../Theme/LanguageContext';
-import translations from '../Translations/localization';
+import { useTheme } from '../Theme/ThemeContext';
+import useLocalFetch from '../hooks/useLocalFetch';
 
 export default function ChapterList({ navigation }) {
-    const chapters = useLocalFetch('chapters', chapterAPI.getChapters);
     const { themeMode } = useTheme();
     const theme = Colors[themeMode];
-    const { language } = useLanguage();
-    const t = translations[language];
 
-    if (!chapters) return <Loading />;
+    const { data: chapters, loading } = useLocalFetch('chapters');
 
     return (
-        <Screen>
-            <View style={[styles.container, { backgroundColor: theme.background }]}>
-                <Text style={[styles.header, { color: theme.text }]}>{t.chapter}</Text>
+        <View style={{ flex: 1, backgroundColor: theme.surface }}>
+            <Header title="Chapters" />
+            {loading ? (
+                <Text style={{ color: theme.text, margin: 20 }}>Loading...</Text>
+            ) : (
                 <FlatList
                     data={chapters}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.chapter_number.toString()}
                     renderItem={({ item }) => (
                         <ChaptersCard
                             item={item}
-                            onPress={() => navigation.navigate('Chapter', { chapterId: item.id })}
+                            onPress={() =>
+                                navigation.navigate('VerseList', { chapterId: item.chapter_number })
+                            }
                         />
                     )}
-                    contentContainerStyle={styles.listContent}
-                    showsVerticalScrollIndicator={false}
                 />
-            </View>
-        </Screen>
+            )}
+        </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingTop: 20,
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    listContent: {
-        paddingBottom: 20,
-    },
-});

@@ -22,12 +22,7 @@ const SettingCard = ({ icon, name, description, type = 'toggle', value, onChange
                 );
             case 'select':
                 return (
-                    <Picker
-                        selectedValue={value}
-                        onValueChange={onChange}
-                        style={[styles.picker, { color: theme.text }]}
-                        dropdownIconColor={theme.icon}
-                    >
+                    <Picker selectedValue={value} onValueChange={onChange} style={[styles.picker, { color: theme.text }]} dropdownIconColor={theme.icon}>
                         {options.map((option) => (
                             <Picker.Item key={option.value} label={option.label} value={option.value} />
                         ))}
@@ -45,44 +40,19 @@ const SettingCard = ({ icon, name, description, type = 'toggle', value, onChange
                 <Text style={[styles.name, { color: theme.text }]}>{name}</Text>
                 <Text style={[styles.description, { color: theme.mutedText }]}>{description}</Text>
             </View>
-            <View style={styles.controlContainer}>
-                {renderControl()}
-            </View>
+            <View style={styles.controlContainer}>{renderControl()}</View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    card: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderRadius: 12,
-        borderWidth: 1,
-        padding: 16,
-        marginVertical: 8,
-        marginHorizontal: 16,
-    },
-    icon: {
-        marginRight: 16,
-    },
-    textContainer: {
-        flex: 1,
-    },
-    name: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    description: {
-        fontSize: 13,
-        marginTop: 4,
-    },
-    controlContainer: {
-        marginLeft: 10,
-    },
-    picker: {
-        width: 130,
-        height: 50,
-    },
+    card: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, borderWidth: 1, padding: 16, marginVertical: 8, marginHorizontal: 16 },
+    icon: { marginRight: 16 },
+    textContainer: { flex: 1 },
+    name: { fontSize: 16, fontWeight: 'bold' },
+    description: { fontSize: 13, marginTop: 4 },
+    controlContainer: { marginLeft: 10 },
+    picker: { width: 130, height: 50 },
 });
 
 export default SettingCard;

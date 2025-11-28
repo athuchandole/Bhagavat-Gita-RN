@@ -2,34 +2,20 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import VerseList from '../screens/VerseList';
-import ViewVerse from '../screens/ViewVerse';
-import Header from '../components/Header';
 import TabNavigator from '../components/TabNavigator';
+import VerseList from '../screens/VerseList';
+import VerseScreen from '../screens/VerseScreen';
 
-import { ThemeProvider } from '../Theme/ThemeContext';
-import { LanguageProvider } from '../Theme/LanguageContext';
 const Stack = createNativeStackNavigator();
 
-const AppNavigator = () => {
-    console.log('[NAVIGATION] AppNavigator initialized');
+export default function AppNavigator() {
     return (
-        <ThemeProvider>
-            <LanguageProvider>
-                <NavigationContainer>
-                    <Stack.Navigator
-                        screenOptions={{
-                            header: () => <Header title="Bhagavat Gita" />
-                        }}
-                    >
-                        <Stack.Screen name="Tabs" component={TabNavigator} />
-                        <Stack.Screen name="Chapter" component={VerseList} />
-                        <Stack.Screen name="Verse" component={ViewVerse} />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </LanguageProvider>
-        </ThemeProvider>
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="MainTabs" component={TabNavigator} />
+                <Stack.Screen name="VerseList" component={VerseList} />
+                <Stack.Screen name="VerseScreen" component={VerseScreen} />
+            </Stack.Navigator>
+        </NavigationContainer>
     );
-};
-
-export default AppNavigator;
+}
